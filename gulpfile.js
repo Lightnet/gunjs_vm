@@ -61,6 +61,22 @@ var front_webpack = {
     ]
 }
 
+
+function onBuild(done) {
+    return function(err, stats) {
+        if(err) {
+            console.log('Error', err);
+        }
+        else {
+            console.log(stats.toString());
+        }
+    
+        if(done) {
+            done();
+        }
+    }
+}
+
 function front_build(done) {
     return src('client.js')
     .pipe(webpack(front_webpack))
@@ -70,7 +86,7 @@ exports.front_build = front_build;
 
 function watch(done) {
     //gulp.watch(['./src/client/*.js','./src/client/*.vue'], gulp.series( build));
-    gulp.watch(['./*.js','./*.vue'], gulp.series( front_build));
+    gulp.watch(['./*.js','./*.vue','./components/*.vue'], gulp.series( front_build));
     //gulp.watch(['./app.js'], gulp.series(build));
     //gulp.watch(['src/client/*.html'], gulp.series( copy_html));
     return done();
