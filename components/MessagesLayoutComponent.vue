@@ -2,7 +2,7 @@
     <div id="chatpanel">
         <div id="chatmessages">
             <div v-for="item in chatmessages" :key="item.id">
-                {{ item.message }}
+                {{ item.text }}
             </div>
         </div>
         <div id="chatbox">
@@ -37,6 +37,7 @@ export default {
         return {
             bshowchat:true,
             bshowsearch:true,
+            bgunsetmessage:false,
             displayiconsearch:"|",
             chatmessage:"",
             currentstatus:"?",
@@ -46,8 +47,11 @@ export default {
             chatmessages:[],
             contacts:[],
             selectcontact:"",
-            gunchat:null,
-            publickey:"",
+            publickey:"", //public key
+            UIdec:"", // decode key
+            gunuser:null, //owner user
+            gunto:null, //refer user
+            
         }
     },
     created: function () {
@@ -62,8 +66,6 @@ export default {
         this.updateContacts();
     },
     beforeDestroy() {
-        //this.gunchat.off();
-        //this.gunchat = null;
         window.removeEventListener("resize", this.resize.bind(this));
     },
     watch: {
@@ -88,20 +90,27 @@ export default {
                 return;
             }
             let user = this.$gun.user();
-            if(!user.is){ return }//check if user exist
+            if(!user.is){ return }//check if user 
+            
+            //let msg = ($('#inputmessagechat').val() || '').trim();
+            //let publickey = ($('#mpublickey').val() || '').trim();
+            let publickey = (this.publickey || '').trim();
+            //if(!msg){console.log("Message EMPTY!");return;}
+            if(!publickey){console.log("Public Key EMPTY!");return;}
+            //let user = this.$gun.user();
+            let to = this.$gun.user(publickey);//get alias
+            let who = await to.then() || {};//get alias data
+            if(!who.alias){console.log("No Alias!");return;}
+            let sec = await Gun.SEA.secret(who.epub, user._.sea); // Diffie-Hellman
+            let enc = await Gun.SEA.encrypt(msg, sec); //encrypt message
+            user.get('messages').get(publickey).set(enc);
 
-            let encmsg = await SEA.work("public","chat");//encrypttion key default?
-            let enc = await SEA.encrypt(msg,encmsg);
-            //console.log(enc);
-            let who = await user.get('alias').then();
-            //console.log(who);
-            //console.log(typeof enc);
-            enc = window.btoa(enc);
-            this.gunchat.get(this.timestamp()).put({
-                alias:who,
-                message:enc
-            });
             console.log("send message...");
+            if(this.bgunsetmessage==false){
+                this.viewprivatemessages();
+                this.bgunsetmessage=true;
+            }
+            
         },
         resize:function(){
             //console.log("...",this.elchatarea);
@@ -198,10 +207,6 @@ export default {
                 text : data.alias 
             });
         },
-        lookup:function(){
-            console.log("looking...");
-            console.log(this.publickey);
-        },
         onchangepubkey: async function(){
             console.log("...");
             if(!this.publickey){
@@ -227,6 +232,52 @@ export default {
                 }
             }
         },
+        viewprivatemessages: async function(){
+            let user = this.$gun.user();
+            if(!user.is){ return }//check if user exist
+            //messages = [];
+            //CleanMessages();
+            this.chatmessages=[];
+            let pub = (this.publickey || '').trim();
+            if(!pub) return;//check if not id empty
+            let to = this.$gun.user(pub);//get alias
+            let who = await to.then() || {};//get alias data
+            if(!who.alias){
+                console.log("No Alias!");
+                $('#mwho').text("who?");
+                return;
+            }
+            //$('#mwho').text(who.alias);
+            this.UIdec = await Gun.SEA.secret(who.epub, user._.sea); // Diffie-Hellman
+            let self = this;
+            user.get('messages').get(pub).map().once((data,id)=>{
+                self.UI(data,id,user.is.alias)
+            });
+            to.get('messages').get(user._.sea.pub).map().once((data,id)=>{
+                self.UI(data,id,who.alias)
+            });
+        },
+        UI: async function (say, id, alias){
+            say = await Gun.SEA.decrypt(say, this.UIdec);
+
+            this.chatmessages.push({
+                id: id,
+                text : alias + ": " + say
+            });
+
+            /*
+            //messages.push({id:id,alias:alias,message:say});
+            if($("#" + id).length){
+                //console.log("found!?");
+            }else{
+                $('#messagelist').append($('<div/>', { 
+                    
+                }));
+            }
+            let element = document.getElementById("messagelist");
+            element.scrollTop = element.scrollHeight;
+            */
+        }
     }
 }
 </script>
