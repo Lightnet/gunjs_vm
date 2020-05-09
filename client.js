@@ -1,4 +1,6 @@
 /*
+    Created by: Lightnet
+    LICENSE: MIT
     Information: Web Client.
 */
 import "@babel/polyfill";
@@ -6,12 +8,11 @@ import "@babel/polyfill";
 import Vue from 'vue';
 //https://vuejs.org/v2/api/
 Vue.config.productionTip = false;
-//Vue.config.silent = true;
+Vue.config.silent = true;
 Vue.config.devtools = false;
-
 import Gun from 'gun/gun'; //browser
 import 'gun/sea';
-//import VueGun from 'vue-gun';
+import VueGun from 'vue-gun';
 //Vue.component('hello-component', require('./components/HelloComponent').default);
 /*
 new Vue({
@@ -24,7 +25,6 @@ new Vue({
 //import HelloComponent from './components/HelloComponent';
 //import TestChatComponent from './components/TestChatComponent';
 import App from './App.vue';
-
 var gun;
 if(location.origin == 'http://localhost:3000'){
     gun = Gun({
@@ -43,19 +43,17 @@ gun.on('hi', peer => {//peer connect
 gun.on('bye', (peer)=>{// peer disconnect
     console.log('Disconnected from peer!');
 });
-Vue.prototype.$gun = gun;
-//Vue.use(VueGun, {
-    //gun: gun // your gun instance
-//});
+//Vue.prototype.$gun = gun;
+Vue.use(VueGun, {
+    gun: gun // your gun instance
+});
 /*
 Vue.use(VueGun, {
     peers: ['http://localhost:8080/gun']
 });
 */
 //console.log(Vue);
-
 function init(){
-    
     new Vue({
         el: '#app', 
         components:{

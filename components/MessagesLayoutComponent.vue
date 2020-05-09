@@ -1,5 +1,5 @@
 <template>
-    <div id="chatpanel">
+    <div id="messagepanel">
         <div id="chatmessages">
             <div v-for="item in chatmessages" :key="item.id">
                 {{ item.text }}
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-    name:"chatpanel",
+    name:"messagepanel",
     data() {
         return {
             bshowchat:false,
@@ -55,7 +55,7 @@ export default {
     },
     mounted:function(){
         //this.initChat();
-        this.elcontent = document.getElementById("chatpanel");
+        this.elcontent = document.getElementById("messagepanel");
         this.elchatarea = document.getElementById("chatmessages");
         this.elchatbox = document.getElementById("chatbox");
         window.addEventListener("resize", this.resize.bind(this));
@@ -221,14 +221,14 @@ export default {
                 this.bshowchat=false;
                 this.chatmessages=[];
             }
-            console.log(who);
+            //console.log(who);
         },
         onselectuser:function(){
             console.log("selected",this.selectcontact);
             for(let i = 0; i < this.contacts.length;i++){
                 if(this.contacts[i].text == this.selectcontact){
                     this.publickey = this.contacts[i].value;
-                    console.log(this.publickey);
+                    //console.log(this.publickey);
                     break;
                 }
             }
@@ -306,7 +306,7 @@ export default {
 }
 </script>
 <style>
-    #chatpanel{
+    #messagepanel{
         height: 100%;
         width: 100%;
     }

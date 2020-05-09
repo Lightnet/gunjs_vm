@@ -16,12 +16,11 @@ export default {
     },
     mounted:function(){
         let user = this.$gun.user();
-        console.log(user);
+        //console.log(user);
         this.publickey=user.is.pub;
     },
     methods:{
         btncopy:function(){
-            
             document.getElementById(this.idpublickey).select();
             try {
                 var successful = document.execCommand('copy');

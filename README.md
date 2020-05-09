@@ -18,7 +18,7 @@ Note there are other packages.
 
  Chat function that work with the RAD. It to load byte size and not whole map list.
  
- Note the gun send to other clients will get node null data but key id send.
+ Note the gun send to other clients will get node null data but key id send. (It may break in latest gun 0.2020.430 version. gun 0.2020.116 works)
 
 # Features:
  * Login / Register UI (seajs functions)
@@ -38,6 +38,11 @@ Note there are other packages.
     gulp default
 ```
 `gulp default` will run auto build and server web.
+
+## Notes:
+ * There are two build.
+ * gulp default ( auto build and web server )
+ * npm start (webpack dev)
 
 # Links:
  * https://webomnizz.com/setup-vuejs-with-webpack-4/

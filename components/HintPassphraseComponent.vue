@@ -35,9 +35,11 @@ export default {
     },
     methods: {
         async getchangehint(){
-            console.log("get data");
+            //console.log("get data");
             let user = this.$gun.user();
-            let sec = await Gun.SEA.secret(user.pair().epub, user.pair());//get user for encrypt message
+            let pair = user._.sea;
+            //console.log(pair);
+            let sec = await Gun.SEA.secret(pair.epub, pair);//get user for encrypt message
 
             this.question1 = await user.get('forgot').get('q1').then();
             this.question1 = await Gun.SEA.decrypt(this.question1, sec);//encrypt hint
@@ -52,21 +54,21 @@ export default {
         },
         async clickchangehint(){
             let user = this.$gun.user();
+            let pair = user._.sea;
             let self = this;
 
             let q1 = this.question1; //get input q1
             let q2 = this.question2;//get input q2
             let hint = this.hint;//get input hint
-            let sec = await Gun.SEA.secret(user.pair().epub, user.pair());//get user for encrypt message
+            let sec = await Gun.SEA.secret(pair.epub, pair);//get user for encrypt message
             let enc_q1 = await Gun.SEA.encrypt(q1, sec);//encrypt q1
             user.get('forgot').get('q1').put(enc_q1);//set hash q1 to user data store
             let enc_q2 = await Gun.SEA.encrypt(q2, sec);//encrypt q1
             user.get('forgot').get('q2').put(enc_q2); //set hash q2 to user data store
             sec = await Gun.SEA.work(q1,q2);//encrypt key
             //console.log(sec);
-            
             let enc = await Gun.SEA.encrypt(hint, sec);//encrypt hint
-            console.log(enc);
+            //console.log(enc);
             user.get('hint').put(enc,ack=>{//set hash hint
                 //console.log(ack);
                 if(ack.ok){

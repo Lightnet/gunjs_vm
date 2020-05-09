@@ -1,9 +1,11 @@
 <template>
     <div id="app">
         <div id="navmenu">
+            <!-- NOT LOGIN -->
             <template v-if="blogin==false">
                 Access: {{navname}}
             </template>
+            <!-- LOGIN TO ACCESS VIEW -->
             <template v-if="blogin">
                 <!-- <a href="#" >Home</a> -->
                 <a href="#" v-for="item in navmenus" v-on:click="setViewComponent(item.context)" :key="item.context"> {{item.name}} |</a>
@@ -12,10 +14,11 @@
             </template>
         </div>
         <div id="content">
+            <!-- LOGIN TO ACCESS VIEW -->
             <template v-if="blogin">
-                <!-- Hello -->
                 <component :is="currentView" ></component>
             </template>
+            <!-- NOT LOGIN DEFAULT ACCESS -->
             <template v-else>
                 <template v-if="bforgotpassphrase==false">
                     <LoginComponent></LoginComponent>
@@ -25,9 +28,6 @@
                 </template>
             </template>
         </div>
-        <!--
-        <ChatPanel></ChatPanel>
-        -->
     </div>
 </template>
 <script>
@@ -38,11 +38,10 @@ import PublicChatLayoutComponent from './components/PublicChatLayoutComponent';
 import PrivateChatLayoutComponent from './components/PrivateChatLayoutComponent';
 import SimpleChatComponent from './components/SimpleChatComponent';
 
-
 import DisplayNameComponent from './components/DisplayNameComponent';
 import PublicKeyDisplayComponent from './components/PublicKeyDisplayComponent';
 
-import ChatPanel from './components/TestChatComponent';
+//import ChatPanel from './components/TestChatComponent';
 import LoginComponent from './components/LoginComponent';
 import ForgotComponent from './components/ForgotComponent';
 import bus from './bus';
@@ -68,17 +67,14 @@ export default {
     },
     created(){
         this.$on('action', this.action);
-
         //this.currentView = ChatPanel;
         //this.currentView = AccountLayoutComponent;
         this.currentView = HomeLayoutComponent;
-
         this.navmenus.push({name:"Home",context:"home",comp:HomeLayoutComponent});
         this.navmenus.push({name:"Account",context:"account",comp:AccountLayoutComponent});
         this.navmenus.push({name:"Messages",context:"messages",comp:MessagesLayoutComponent});
         this.navmenus.push({name:"Public Chat",context:"publicchat",comp:PublicChatLayoutComponent});
         this.navmenus.push({name:"Private Chat",context:"privatechat",comp:PrivateChatLayoutComponent});
-
         this.navmenus.push({name:"Simple Chat",context:"simplechat",comp:SimpleChatComponent});
     },
     mounted(){
@@ -119,7 +115,6 @@ export default {
         resize:function(){
             //console.log(this.elappcontent);
             if(this.elappcontent == null) return;
-
             this.elcontent.style.height = (this.elappcontent.clientHeight - 2*24) + "px";
             this.elcontent.style.width = (this.elappcontent.clientWidth) + "px";
         },

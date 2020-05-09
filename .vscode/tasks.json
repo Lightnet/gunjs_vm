@@ -1,0 +1,19 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Webpack and Server",
+            "type": "shell",
+            "command": "npm start",
+            "problemMatcher": []
+        },
+        {
+            "label": "gulp default",
+            "type": "shell",
+            "command": "gulp default",
+            "problemMatcher": []
+        }
+    ]
+}

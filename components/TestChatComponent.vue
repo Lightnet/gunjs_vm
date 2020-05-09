@@ -14,6 +14,7 @@
     </div>
 </template>
 <script>
+
 export default {
     name:"chatpanel",
     data() {
@@ -28,7 +29,7 @@ export default {
         }
     },
     created: function () {
-        
+        console.log("init...");
     },
     mounted:function(){
         this.initChat();
@@ -100,7 +101,6 @@ export default {
                 //message:enc
                 message:msg
             });
-
             /*
             this.chatmessages.push({
                 id:gen,
@@ -111,7 +111,6 @@ export default {
                 this.scrollbottom();
             },300);
             */
-            
         },
         resize:function(){
             //console.log("...",this.elchatarea);
@@ -153,5 +152,4 @@ export default {
     #chatmessages{
         overflow-y: scroll;
     }
-
 </style>

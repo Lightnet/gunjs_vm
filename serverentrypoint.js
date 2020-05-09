@@ -1,3 +1,7 @@
+/*
+    Created by: Lightnet
+    Information: web server.
+*/
 // https://github.com/lukeed/polka
 // https://dev.to/kvng_zeez/introducing-polka-a-micro-web-server-3p55
 // https://www.npmjs.com/package/polka
@@ -47,11 +51,4 @@ gun.on('bye', (peer)=>{// peer disconnect
   //console.log('disconnected from', peer);
   console.log('disconnected from peer!');
 });
-
 const io = require('socket.io')(app.server);
-
-//const gameEngine = new Game({});
-//const serverEngine = new ServerEngine(io, gameEngine, { debug: {}, updateRate: 6 });
-// start the game
-//serverEngine.start();
-

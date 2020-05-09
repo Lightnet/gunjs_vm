@@ -57,7 +57,8 @@ var front_webpack = {
             cache: true,
             template: join(__dirname, 'index.html')
         })
-    ]
+    ],
+    //exprContextCritical: false,
 }
 
 function front_build(done) {
@@ -75,7 +76,7 @@ exports.copy_css = copy_css;
 
 function watch(done) {
     //gulp.watch(['./src/client/*.js','./src/client/*.vue'], gulp.series( build));
-    gulp.watch(['./*.js','./*.vue','./components/*.vue'], gulp.series( front_build));
+    gulp.watch(['./*.js','./**/*.vue'], gulp.series( front_build ));
     gulp.watch(['global.css'], gulp.series( copy_css));
     return done();
 };
@@ -111,4 +112,9 @@ exports.serve = serve;
 
 exports.build = series(front_build)
 
-exports.default = series(front_build,copy_css,watch,serve)
+exports.default = series(
+    front_build,
+    copy_css,
+    watch,
+    serve
+);

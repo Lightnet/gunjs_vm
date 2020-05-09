@@ -27,6 +27,7 @@ export default {
         }
     },
     created: function () {
+        console.log("init chat...");
     },
     mounted:function(){
         this.initChat();
@@ -82,9 +83,6 @@ export default {
         btnchat:function(){
             console.log(this.chatmessage);
             this.sendmessage(this.chatmessage);
-        },
-        btnguntest:function(){
-            console.log(this.$gun);
         },
         sendmessage:function(_value){
             let msg = (_value || "").trim();

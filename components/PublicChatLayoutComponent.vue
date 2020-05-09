@@ -1,5 +1,5 @@
 <template>
-    <div id="chatpanel">
+    <div id="publicchatpanel">
         <!--<h2 class="text-center">Chat Room</h2>-->
         <div id="chatmessages">
             <div v-for="item in chatmessages" :key="item.id">
@@ -14,7 +14,7 @@
 </template>
 <script>
 export default {
-    name:"chatpanel",
+    name:"publicchatpanel",
     data() {
         return {
             chatmessage:"",
@@ -30,7 +30,7 @@ export default {
     },
     mounted:function(){
         this.initChat();
-        this.elcontent = document.getElementById("chatpanel");
+        this.elcontent = document.getElementById("publicchatpanel");
         this.elchatarea = document.getElementById("chatmessages");
         this.elchatbox = document.getElementById("chatbox");
         window.addEventListener("resize", this.resize.bind(this));
@@ -144,7 +144,7 @@ export default {
 }
 </script>
 <style>
-    #chatpanel{
+    #publicchatpanel{
         height: 100%;
         width: 100%;
     }
