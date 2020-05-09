@@ -76,7 +76,7 @@ export default {
         this.navmenus.push({name:"Home",context:"home",comp:HomeLayoutComponent});
         this.navmenus.push({name:"Account",context:"account",comp:AccountLayoutComponent});
         this.navmenus.push({name:"Messages",context:"messages",comp:MessagesLayoutComponent});
-        this.navmenus.push({name:"Public Chat",context:"publicchat",comp:ChatPanel});
+        this.navmenus.push({name:"Public Chat",context:"publicchat",comp:PublicChatLayoutComponent});
         this.navmenus.push({name:"Private Chat",context:"privatechat",comp:PrivateChatLayoutComponent});
 
         this.navmenus.push({name:"Simple Chat",context:"simplechat",comp:SimpleChatComponent});
@@ -120,7 +120,7 @@ export default {
             //console.log(this.elappcontent);
             if(this.elappcontent == null) return;
 
-            this.elcontent.style.height = (this.elappcontent.clientHeight - 24) + "px";
+            this.elcontent.style.height = (this.elappcontent.clientHeight - 2*24) + "px";
             this.elcontent.style.width = (this.elappcontent.clientWidth) + "px";
         },
     }

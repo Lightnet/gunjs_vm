@@ -1,6 +1,6 @@
 <template>
     <div id="chatpanel">
-        <h2 class="text-center">Chat Room</h2>
+        <!--<h2 class="text-center">Chat Room</h2>-->
         <div id="chatmessages">
             <div v-for="item in chatmessages" :key="item.id">
                 {{ item.message }}
@@ -8,8 +8,7 @@
         </div>
         <div id="chatbox">
             <input v-model="chatmessage" v-on:keyup.enter="onEnterChat" placeholder="Reply here"/>
-            <button v-on:click="btnchat"> Chat </button>
-            <button v-on:click="btnguntest"> Gun </button>
+            <button v-on:click="btnchat"> Chat </button>  <label> Simple Chat </label>
         </div>
     </div>
 </template>
@@ -28,7 +27,6 @@ export default {
         }
     },
     created: function () {
-        
     },
     mounted:function(){
         this.initChat();
@@ -124,11 +122,13 @@ export default {
             //console.log("...",this.elchatarea);
             let parent = this.elcontent.parentNode;
             if(parent !=null){
+                this.elcontent.style.height = (parent.clientHeight)  + 'px';
+
                 //console.log(parent.clientHeight);
-                this.elchatarea.style.height = (window.innerHeight - 100) + 'px';
+                this.elchatarea.style.height = (parent.clientHeight - 2*24) + 'px';
                 this.elchatarea.style.width = parent.clientWidth + 'px';
 
-                this.elchatbox.style.height = 32 + 'px';
+                this.elchatbox.style.height = 24 + 'px';
                 this.elchatbox.style.width = parent.clientWidth + 'px';
             }
         },
