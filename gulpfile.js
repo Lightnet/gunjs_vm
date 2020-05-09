@@ -2,7 +2,6 @@ const mode = process.env.NODE_ENV || 'development';
 const dev = mode === 'development';
 const prod = mode === 'production';
 var started = false;
-var server = null;
 
 const path                              = require('path');
 const fs                                = require('fs');
@@ -61,22 +60,6 @@ var front_webpack = {
     ]
 }
 
-
-function onBuild(done) {
-    return function(err, stats) {
-        if(err) {
-            console.log('Error', err);
-        }
-        else {
-            console.log(stats.toString());
-        }
-    
-        if(done) {
-            done();
-        }
-    }
-}
-
 function front_build(done) {
     return src('client.js')
     .pipe(webpack(front_webpack))
@@ -84,14 +67,18 @@ function front_build(done) {
 }
 exports.front_build = front_build;
 
+function copy_css(done) {
+    return src('global.css')
+    .pipe(dest('public/'));
+}
+exports.copy_css = copy_css;
+
 function watch(done) {
     //gulp.watch(['./src/client/*.js','./src/client/*.vue'], gulp.series( build));
     gulp.watch(['./*.js','./*.vue','./components/*.vue'], gulp.series( front_build));
-    //gulp.watch(['./app.js'], gulp.series(build));
-    //gulp.watch(['src/client/*.html'], gulp.series( copy_html));
+    gulp.watch(['global.css'], gulp.series( copy_css));
     return done();
 };
-
 exports.watch = watch;
 
 function serve(done){
@@ -105,7 +92,6 @@ function serve(done){
         //tasks: ['cleanscript'],
         done: done,
 	}).on('start', function () {
-        //console.log('===================================');
         //console.log('started!');
 		// to avoid nodemon being started multiple times
 		// thanks @matthisk
@@ -115,12 +101,8 @@ function serve(done){
         } 
         //console.log('started END=========!');
     }).on('restart', function () {
-        //console.log('===================================');
         //console.log('restarted!');
-        //cleanscript();
     }).on('crash', function() {
-        //console.log('===================================');
-        //console.error('Application has crashed!\n');
         stream.emit('restart', 5);  // restart the server in 5 seconds
     });
     return stream;
@@ -129,4 +111,4 @@ exports.serve = serve;
 
 exports.build = series(front_build)
 
-exports.default = series(front_build,watch,serve)
+exports.default = series(front_build,copy_css,watch,serve)

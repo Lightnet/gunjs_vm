@@ -1,9 +1,10 @@
 {
-  "name": "vuejs_build",
+  "name": "gunjs_vm",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@babel/polyfill": "^7.8.7",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "esm": "^3.2.25",
@@ -37,6 +38,6 @@
     "dev": "webpack-dev-server --mode development",
     "prod": "webpack --mode production"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Lightnet",
+  "license": "MIT"
 }

@@ -39,15 +39,17 @@ export default {
         window.dispatchEvent(new Event('resize'));
     },
     beforeDestroy() {
+        this.gunchat.off();
+        this.gunchat = null;
         window.removeEventListener("resize", this.resize.bind(this));
     },
     methods: {
         initChat:function(){
             let self = this;
             function qcallback(data,key){
-                console.log('incoming messages...');
-                console.log("key:",key);
-                console.log("data >> ",data);
+                //console.log('incoming messages...');
+                //console.log("key:",key);
+                //console.log("data >> ",data);
                 if(data == null)return;
                 if(data.message != null){
                     let dec = data.message;
@@ -71,7 +73,7 @@ export default {
             if(this.gunchat !=null){
                 this.gunchat.off();
             }
-            this.gunchat = this.$gun.get('publicchat');
+            this.gunchat = this.$gun.get('simplechat');
             this.gunchat.get({'.': {'*': timestring},'%': 50000}).map().once(qcallback);
         },
         onEnterChat: function() {
@@ -95,11 +97,16 @@ export default {
             let gen = Gun.text.random(16);
             console.log(gen);
 
-            this.$gun.get('publicchat').get(this.timestamp()).put({
+            this.gunchat.get(this.timestamp()).put({
                 alias:this.userid,
-                //message:enc
                 message:msg
             });
+
+            //this.$gun.get('simplechat').get(this.timestamp()).put({
+                //alias:this.userid,
+                //message:enc
+                //message:msg
+            //});
 
             /*
             this.chatmessages.push({
