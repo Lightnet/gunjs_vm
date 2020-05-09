@@ -16,16 +16,21 @@ Note there are other packages.
 # Information:
  Testing vuejs for gunjs functions to work with chat.
 
+ Chat function that work with the RAD. It to load byte size and not whole map list.
+ 
+ Note the gun send to other clients will get node null data but key id send.
+
 # Features:
  * Login / Register UI (seajs functions)
+ * Forgot Passphrase Hint UI
  * Hint Passphrase UI
  * Change Passphrase UI (seajs functions)
  * Simple Chat Test (It may break in latest gun 0.2020.430 version. gun 0.2020.116 works)
- * Messages system (wip)
  * Users Contacts (wip)
- * Public Chat with simple seajs 
+ * Public Chat with simple seajs
+ * Private Messages Public Key
  * Private Chat (not build yet)
- * Private Messages (not build yet)
+
 # Install and Run:
 
 ```

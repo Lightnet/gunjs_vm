@@ -12,10 +12,10 @@
             </template>
             <button v-on:click="btntogglesearch"> {{displayiconsearch}} </button>
             <template v-if="bshowsearch">
-                <!-- v-on:change="onselectuser" -->
-                <select v-model="selectcontact" >
-                    <option selected disabled> - Select Alias Key - </option>
-                    <option v-for="item in contacts" :key="item.value"> {{item.text}} </option>
+                <!--  -->
+                <select v-model="selectcontact" v-on:change="onselectuser">
+                    <option value="" selected="selected" > - Select Alias Key - </option>
+                    <option v-for="item in contacts" :key="item.value" > {{item.text}} </option>
                 </select>
 
                 <input v-model="publickey" v-on:keydown="onchangepubkey" />
@@ -23,10 +23,7 @@
                 <button v-on:click="btnadduser">+</button>
                 <button v-on:click="btnremoveuser">-</button>
                 <label>Who: {{currentstatus}}</label>
-
-                <button v-on:click="btnshowchat">show chat</button>
             </template>
-
         </div>
     </div>
 </template>
@@ -35,7 +32,7 @@ export default {
     name:"chatpanel",
     data() {
         return {
-            bshowchat:true,
+            bshowchat:false,
             bshowsearch:true,
             bgunsetmessage:false,
             displayiconsearch:"|",
@@ -66,6 +63,14 @@ export default {
         this.updateContacts();
     },
     beforeDestroy() {
+        if(this.gunuser != null){
+            //this.gunuser.off();
+            this.gunuser=null;
+        }
+        if(this.gunto != null){
+            //this.gunto.off();
+            this.gunto=null;
+        }
         window.removeEventListener("resize", this.resize.bind(this));
     },
     watch: {
@@ -106,11 +111,6 @@ export default {
             user.get('messages').get(publickey).set(enc);
 
             console.log("send message...");
-            if(this.bgunsetmessage==false){
-                this.viewprivatemessages();
-                this.bgunsetmessage=true;
-            }
-            
         },
         resize:function(){
             //console.log("...",this.elchatarea);
@@ -141,9 +141,6 @@ export default {
             let second = ("0" +currentDate.getSeconds()).slice(-2);
             let millisecond = currentDate.getMilliseconds();
             return year + "/" + (month) + "/" + date + ":" + hour+ ":" + minute+ ":" + second+ ":" + millisecond;        
-        },
-        btnshowchat:function(){
-            this.bshowchat = !this.bshowchat;
         },
         btntogglesearch:function(){
             this.bshowsearch = !this.bshowsearch;
@@ -217,10 +214,13 @@ export default {
             let who = await to.get('alias').then();
             if(who){
                 this.currentstatus = who;
+                this.viewprivatemessages();
+                this.bshowchat=true;
             }else{
                 this.currentstatus = "?";
+                this.bshowchat=false;
+                this.chatmessages=[];
             }
-            
             console.log(who);
         },
         onselectuser:function(){
@@ -228,6 +228,7 @@ export default {
             for(let i = 0; i < this.contacts.length;i++){
                 if(this.contacts[i].text == this.selectcontact){
                     this.publickey = this.contacts[i].value;
+                    console.log(this.publickey);
                     break;
                 }
             }
@@ -240,6 +241,16 @@ export default {
             this.chatmessages=[];
             let pub = (this.publickey || '').trim();
             if(!pub) return;//check if not id empty
+            if(this.gunuser != null){
+                //this.gunuser.off();
+                this.gunuser=null;
+                
+            }
+            if(this.gunto != null){
+                //this.gunto.off();
+                this.gunto=null;
+            }
+
             let to = this.$gun.user(pub);//get alias
             let who = await to.then() || {};//get alias data
             if(!who.alias){
@@ -250,12 +261,25 @@ export default {
             //$('#mwho').text(who.alias);
             this.UIdec = await Gun.SEA.secret(who.epub, user._.sea); // Diffie-Hellman
             let self = this;
+
+            this.gunuser = user.get('messages').get(pub);
+            this.gunuser.map().once((data,id)=>{
+                self.UI(data,id,user.is.alias);
+            });
+
+            this.gunto = to.get('messages').get(user._.sea.pub);
+            this.gunto.map().once((data,id)=>{
+                self.UI(data,id,who.alias);
+            });
+
+            /*
             user.get('messages').get(pub).map().once((data,id)=>{
                 self.UI(data,id,user.is.alias)
             });
             to.get('messages').get(user._.sea.pub).map().once((data,id)=>{
                 self.UI(data,id,who.alias)
             });
+            */
         },
         UI: async function (say, id, alias){
             say = await Gun.SEA.decrypt(say, this.UIdec);
@@ -277,7 +301,7 @@ export default {
             let element = document.getElementById("messagelist");
             element.scrollTop = element.scrollHeight;
             */
-        }
+        },
     }
 }
 </script>

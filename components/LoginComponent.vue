@@ -1,5 +1,9 @@
 <template>
     <div>
+        <select v-model="selectuser" v-on:change="onselectuser">
+            <option value="" selected="selected" disabled > - Select Alias (test purpose) - </option>
+            <option v-for="item in aliascontacts" :key="item.name">{{item.name}}</option>
+        </select>
         <table>
             <tr>
                 <td>User:</td>
@@ -24,7 +28,14 @@ export default {
         return {
             username:"test",
             passphrase:"test",
+            selectuser:"",
+            aliascontacts:[],
         }
+    },
+    mounted:function(){
+        this.aliascontacts.push({name:"beta",passphrase:"test"});
+        this.aliascontacts.push({name:"alpha",passphrase:"test"});
+        this.aliascontacts.push({name:"test",passphrase:"test"});
     },
     methods: {
         clickLogin(){
@@ -79,6 +90,15 @@ export default {
         },
         clickForgot(){
             this.$parent.$emit('action','accessforgot');
+        },
+        onselectuser:function(){
+            console.log(this.selectuser);
+            for(let i = 0;i < this.aliascontacts.length;i++){
+                if(this.aliascontacts[i].name == this.selectuser){
+                    this.username = this.aliascontacts[i].name;
+                    this.passphrase = this.aliascontacts[i].passphrase;
+                }
+            }
         }
     }
 }
