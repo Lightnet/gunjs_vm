@@ -26,10 +26,10 @@ Note there are other packages.
  * Hint Passphrase UI
  * Change Passphrase UI (seajs functions)
  * Simple Chat Test (It may break in latest gun 0.2020.430 version. gun 0.2020.116 works)
- * Users Contacts (wip)
+ * Users Contacts
  * Public Chat with simple seajs
  * Private Messages Public Key
- * Private Chat (not build yet)
+ * Private Chat (wip)
 
 # Install and Run:
 
